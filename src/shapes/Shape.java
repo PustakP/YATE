@@ -12,7 +12,7 @@ public abstract class Shape {
         this.y = y;
         this.width = width;
         this.height = height;
-        this.color = Color.BLACK;
+        this.color = Color.WHITE;
     }
     
     public abstract void draw(Graphics2D g2d);

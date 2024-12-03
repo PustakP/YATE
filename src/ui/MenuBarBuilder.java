@@ -2,7 +2,10 @@ package ui;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseAdapter;
 import utils.*;
+import java.awt.Color;
 
 public class MenuBarBuilder {
     private FileHandler fileHandler;
@@ -14,8 +17,10 @@ public class MenuBarBuilder {
     }
     
     public JMenuBar build() {
-        // init main menu bar
+        // init main menu bar w/ theme colors
         JMenuBar menuBar = new JMenuBar();
+        menuBar.setBackground(ThemeColors.TOOLBAR_BG);
+        menuBar.setOpaque(true);
         
         // file menu
         JMenu fileMenu = new JMenu("File");
@@ -38,7 +43,7 @@ public class MenuBarBuilder {
         fileMenu.add(exitItem);
         
         // edit menu
-        JMenu editMenu = new JMenu("Edit");
+        JMenu editMenu = new JMenu("Tools");
         editMenu.setMnemonic(KeyEvent.VK_E);
         
         JMenuItem findItem = new JMenuItem("Find/Replace", KeyEvent.VK_F);
@@ -54,7 +59,38 @@ public class MenuBarBuilder {
         menuBar.add(fileMenu);
         menuBar.add(editMenu);
         
+        // style all menus and items
+        styleMenu(fileMenu);
+        styleMenu(editMenu);
+        
         return menuBar;
+    }
+    
+    private void styleMenu(JMenu menu) {
+        menu.setBackground(ThemeColors.MENU_BG);
+        menu.setOpaque(true);
+        menu.setForeground(ThemeColors.TEXT);
+        menu.setBorderPainted(false);
+        menu.getPopupMenu().setBackground(ThemeColors.MENU_BG);
+        menu.getPopupMenu().setBorder(BorderFactory.createLineBorder(ThemeColors.BORDER));
+        
+        for (int i = 0; i < menu.getItemCount(); i++) {
+            JMenuItem item = menu.getItem(i);
+            if (item != null) {
+                item.setBackground(ThemeColors.MENU_BG);
+                item.setForeground(ThemeColors.TEXT);
+                item.setOpaque(true);
+                
+                item.addMouseListener(new MouseAdapter() {
+                    public void mouseEntered(MouseEvent e) {
+                        item.setBackground(ThemeColors.MENU_HOVER);
+                    }
+                    public void mouseExited(MouseEvent e) {
+                        item.setBackground(ThemeColors.TITLE_BAR);
+                    }
+                });
+            }
+        }
     }
     
     private void showFindReplaceDialog() {
@@ -66,17 +102,35 @@ public class MenuBarBuilder {
         JTextField replaceField = new JTextField(20);
         
         JButton findButton = new JButton("Find");
-        JButton replaceButton = new JButton("Replace");
-        JButton replaceAllButton = new JButton("Replace All");
+        findButton.setToolTipText("Find next occurrence");
         
+        JButton replaceButton = new JButton("Replace");
+        replaceButton.setToolTipText("Replace current selection");
+        
+        
+        JButton replaceAllButton = new JButton("Replace All");
+        replaceAllButton.setToolTipText("Replace all occurrences");
+        
+        // find next occurrence
         findButton.addActionListener(e -> 
+            textManipulator.findAndReplace(findField.getText(), "", false));
+        
+        // replace current selection
+        replaceButton.addActionListener(e -> 
             textManipulator.findAndReplace(findField.getText(), replaceField.getText(), false));
+        
+        // replace all occurrences
         replaceAllButton.addActionListener(e -> 
             textManipulator.findAndReplace(findField.getText(), replaceField.getText(), true));
         
-        dialog.add(new JLabel("Find:"));
+        // add labels and fields
+        JLabel findLabel = new JLabel("Find:");
+        findLabel.setForeground(ThemeColors.TEXT);
+        dialog.add(findLabel);
         dialog.add(findField);
-        dialog.add(new JLabel("Replace with:"));
+        JLabel replaceLabel = new JLabel("Replace with:");
+        replaceLabel.setForeground(ThemeColors.TEXT);
+        dialog.add(replaceLabel);
         dialog.add(replaceField);
         dialog.add(findButton);
         dialog.add(replaceButton);
