@@ -196,14 +196,21 @@ public class ToolbarBuilder {
     }
     
     private void updateFont() {
-        // get font family combo box (it's the second component after the label)
-        JComboBox<String> fontBox = (JComboBox<String>)toolbar.getComponentAtIndex(1);
-        String fontName = (String)fontBox.getSelectedItem();
+        // find font family combo box in toolbar components
+        JComboBox<String> fontBox = null;
+        for (Component c : toolbar.getComponents()) {
+            if (c instanceof JComboBox) {
+                fontBox = (JComboBox<String>) c;
+                break;
+            }
+        }
         
-        // get current font size from text manipulator
-        int fontSize = textManipulator.getCurrentFontSize();
-        
-        textManipulator.changeFont(fontName, fontSize);
+        if (fontBox != null) {
+            String fontName = (String)fontBox.getSelectedItem();
+            // get current font size from text manipulator
+            int fontSize = textManipulator.getCurrentFontSize();
+            textManipulator.changeFont(fontName, fontSize);
+        }
     }
     
     private void addHoverEffect(JButton btn) {
