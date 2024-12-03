@@ -4,7 +4,7 @@ import javax.swing.*;
 import ui.TextEditorUI;
 import utils.ThemeColors;
 
-public class TextEditorMain {
+public class Main{
     public static void main(String[] args) {
         // set system look and feel for dark theme
         try {
