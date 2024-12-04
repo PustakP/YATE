@@ -54,15 +54,27 @@ public class MenuBarBuilder {
         
         editMenu.add(findItem);
         editMenu.add(countItem);
-        
+
+        // about me :3
+        JMenu aboutMenu = new JMenu("About");
+        aboutMenu.setMnemonic(KeyEvent.VK_P);
+
+        JMenuItem aboutItem = new JMenuItem("About Me", KeyEvent.VK_A);
+//        aboutItem.addActionListener(e -> JOptionPane.showMessageDialog(null, "Made by: Pustak Pathak\n2310110564", "CSD213 Project Submission for Pustak Pathak"));
+        aboutItem.addActionListener(e -> JOptionPane.showMessageDialog(null, "Made by: Pustak Pathak\n2310110564", "CSD213 Project Submission for Pustak Pathak", JOptionPane.INFORMATION_MESSAGE));
+        aboutMenu.add(aboutItem);
+
+
         // add menus to bar
         menuBar.add(fileMenu);
         menuBar.add(editMenu);
-        
+        menuBar.add(aboutMenu);
+
         // style all menus and items
         styleMenu(fileMenu);
         styleMenu(editMenu);
-        
+        styleMenu(aboutMenu);
+
         return menuBar;
     }
     
